@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  laravel:
+    build:
+      context: ./laravel
+    container_name: laravel_app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./laravel:/var/www/html
+    environment:
+      DB_HOST: mysql
+      DB_DATABASE: app_db
+      DB_USERNAME: app_user
+      DB_PASSWORD: app_password
+    depends_on:
+      - mysql
+
+  fastapitool:
+    build:
+      context: ./fastAPITool
+    container_name: fastapi_app
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./fastAPITool:/app
+    environment:
+      DB_HOST: mysql
+      DB_DATABASE: app_db
+      DB_USERNAME: app_user
+      DB_PASSWORD: app_password
+    depends_on:
+      - mysql
+
+volumes:
+  db_data:
