@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ImportFileController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -18,6 +17,9 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+
 });
 
+// Import File Route
+Route::get('/import', App\Livewire\ImportFile::class)->name('import');
 require __DIR__.'/auth.php';
